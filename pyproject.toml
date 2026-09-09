@@ -1,0 +1,35 @@
+# Helix runtime. One installable package so tests and the CLI share
+# an import path; no build backend tricks, setuptools src-layout is enough.
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "helix-agent"
+version = "0.1.0"
+description = "Helix Industries autonomous IT helpdesk agent"
+requires-python = ">=3.12"
+# Direct deps mirror requirements.in; the tested pin set lives in
+# requirements.lock.txt (uv pip compile output), which is what CI/graders sync.
+dependencies = [
+    "anthropic",
+    "pydantic>=2,<3",
+    "python-dotenv",
+    "rank-bm25",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests", "tests_pack"]
+# The suite must stay deterministic: no live model calls run under pytest.
+# Live evaluation is a separate explicit CLI command (python -m helix evaluate --live).
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

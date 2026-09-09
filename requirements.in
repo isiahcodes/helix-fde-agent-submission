@@ -1,0 +1,8 @@
+# Candidate direct dependencies, not a tested lockfile.
+# Resolve on Python 3.12, install, smoke-test, then commit the generated lock.
+anthropic
+pydantic>=2,<3
+pytest
+ruff
+python-dotenv
+rank-bm25
